@@ -35,19 +35,21 @@ groups
 env_ss<-read.csv(file.choose())#20210503_Cap2_Jonas_Correlation
 str(env_ss)
 names(env_ss)
-names(env_ss)[names(env_ss) == "Shannon_diversity_h"] <- "Diversity"
-names(env_ss)[names(env_ss) == "Total_litterfall_g_m2_month"] <- "Tot_Litterfall"
-names(env_ss)[names(env_ss) == "Leaf_fall_g_m2_month"] <- "Leaf_fall"
-names(env_ss)[names(env_ss) == "Wood_fall_g_m2_month"] <- "Wood_fall"
-names(env_ss)[names(env_ss) == "Mean_monthly_rainfall_mm"] <- "Monthly_rainfall"
+names(env_ss)[names(env_ss) == "Total_abundance"] <- "Abundance"
+names(env_ss)[names(env_ss) == "Pielou"] <- "Evenness"
+names(env_ss)[names(env_ss) == "Shannon"] <- "Diversity"
+names(env_ss)[names(env_ss) == "Total_litterfall_g_m2_month"] <- "Total litterfall"
+names(env_ss)[names(env_ss) == "Leaf_fall_g_m2_month"] <- "Leaf fall"
+names(env_ss)[names(env_ss) == "Wood_fall_g_m2_month"] <- "Wood fall"
+names(env_ss)[names(env_ss) == "Mean_monthly_rainfall_mm"] <- "Monthly rainfall"
 names(env_ss)[names(env_ss) == "Leaf_k_at_720"] <- "Leaf_k"
 names(env_ss)[names(env_ss) == "Wood_k_at_720"] <- "Wood_k"
 
 #Seasonal environmental data frame
-meso_cap2_env <- cbind(data.frame(env_ss[,c(1:9)]))
-str(meso_cap2_env)
+meso_cap2_env_b <- cbind(data.frame(env_ss[,c(3,5:8,11:13)]))
+str(meso_cap2_env_b)
 
-meso_cap2_env <- cbind(data.frame(meso_cap2[1:2],Plot_raw=Plot,env_ss[,c(3,5:13)]))
+meso_cap2_env <- cbind(data.frame(meso_cap2[1:2],Plot_raw=Plot,env_ss[,c(3,5:8,11:13)]))
 str(meso_cap2_env)
 
 #Annual environmental data frame
@@ -103,7 +105,7 @@ new_mds
 meso.mds_up2 <- metaMDS(new_mds,trymax=1000,k=2,autotransform = F)#species level based on dissimilarities
 meso.mds_up2#Stress 0.06
 
-p_env<-envfit(meso.mds_up2, meso_cap2_env,permutations=999)# this fits environmental vectors
+p_env<-envfit(meso.mds_up2, meso_cap2_env_b,permutations=999)# this fits environmental vectors
 p_env
 
 p_spp.fit <- envfit(meso.mds_up2, meso_cap2.1, permutations = 999) # this fits species vectors
@@ -191,11 +193,6 @@ p_nmds_all<-p_nmds+nmds.ssp.env+ plot_layout(ncol=2,widths=c(1,1))+plot_annotati
   theme(plot.tag = element_text(size = 22),plot.tag.position =c(0.05,1))
 p_nmds_all
 
-#Saving figure in high res new Figure 5
-ggsave(filename = "Fig5_Final_NMDS_v7.png",
-       plot = p_nmds_all, width = 18, height = 9, units = 'cm',
-       scale = 2, dpi = 1000)
-
 ##Annual values####
 
 new_mds_an <- vegdist(decostand(meso_cap2.1_an,"norm"), "bray")#distance matrix using bray curtis dissimilarity
@@ -280,8 +277,8 @@ p_nmds_all_2<-p_nmds+nmds.ssp.env+pca_final+nmds.ssp.env_an+plot_annotation(tag_
 p_nmds_all_2
 
 #saving
-ggsave(filename = "Fig5_Final_Panel_v6.png",
-       plot = p_nmds_all_2, width = 18, height = 18, units = 'cm',
+ggsave(filename = "Fig5_Final_Panel_v7.png",
+       plot = p_nmds_all_2, width = 20, height = 18, units = 'cm',
        scale = 2, dpi = 1000)
 
 ##PERMANOVA##

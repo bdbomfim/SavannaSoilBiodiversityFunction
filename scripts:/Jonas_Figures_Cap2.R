@@ -22,7 +22,6 @@ J
 Plot<-c(1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12)
 Plot
 comm_data<-cbind(data.frame(meso_cap2$Season,meso_cap2$Plot,Plot,meso_cap2$Total_Abundance,H,S,J))
-names(comm_data)
 comm_data
 
 #exporting comm-data as csv /Users/bbomfim/Dropbox/R/Inkotte_Chap3
@@ -84,7 +83,7 @@ p_even3
 p_sp<-ggplot(comm_data, aes(x=reorder(meso_cap2.Season, -S),y=S, fill = meso_cap2.Season)) +
   geom_boxplot(alpha=0.8) +
   coord_flip() +  #this flips the co-ordinates so your x axis becomes your y and vice versa
-  labs(y="Number of groups", x="") +#scale_color_discrete(palette="Dark2")
+  labs(y="Taxa richness", x="") +#scale_color_discrete(palette="Dark2")
   theme_bw() + # ggplot2 has a few theme options, I like minimal and classic
   theme(panel.grid.minor=element_blank(), # get rid of background grid
         panel.grid.major=element_blank(),
@@ -100,13 +99,20 @@ p_sp3<-p_sp + stat_compare_means(
 p_sp3
 
 #Final plot
-plot_meso_final<-(p_abd2+p_div2)/(p_even2+p_sp2)+
+plot_meso_final<-(p_abd2+p_div2)/(p_even2+p_sp2)
 plot_meso_final
 
-ggsave(filename = "Fig_Meso_Cap2_v5.png",
+ggsave(filename = "Fig1_Meso_v6.png",
        plot = plot_meso_final, width = 18, height = 13, units = 'cm',
        scale = 2, dpi = 1000)
 
+##Summary statistics for results section##
+summary(comm_data)
+comm_rainy<-comm_data %>% filter (meso_cap2.Season=="Rainy")
+summary(comm_rainy)
+
+comm_dry<-comm_data %>% filter (meso_cap2.Season=="Dry")
+summary(comm_dry)
 
 #### Correlation plot####
 
