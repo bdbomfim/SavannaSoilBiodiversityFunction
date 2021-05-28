@@ -13,6 +13,7 @@ library(ggpubr)
 library(dplyr)
 library(ggrepel)
 library(patchwork)
+citation()
 
 #NMDS CAP 2 APPLIED SOIL ECOLOGY
 
@@ -108,6 +109,9 @@ p_env
 p_spp.fit <- envfit(meso.mds_up2, meso_cap2.1, permutations = 999) # this fits species vectors
 p_spp.fit
 
+#PERMANOVA
+adonis2(new_mds ~ meso_cap2$Season,permutations = 999,method="bray",by="margin")
+
 #Preparing data for figures
 site.scrs <- as.data.frame(scores(meso.mds_up2))  #Using the scores function from vegan to extract the site scores and convert to a data.frame
 site.scrs <- cbind(site.scrs, Season = meso_cap2_env$Season)
@@ -152,7 +156,7 @@ nmds.ssp.env<-nmds.ssp+
   labs(title = "Soil epigeic fauna, litterfall and rainfall")
 nmds.ssp.env
 
-#Data frame
+#Data frame for Figure 5a
 MDS_xy<- as.data.frame(meso.mds_up2$points)
 MDS_xy$Season<- meso_cap2$Season
 Plot<-c(1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12)
@@ -175,10 +179,12 @@ p_nmds<-ggplot(MDS_xy, aes(MDS1, MDS2, shape = Season, colour = Season)) + geom_
   annotate(geom="text", x=0.45, y=0.7, label="Stress = 0.06",color="black", size = 5)+theme(plot.title = element_text(size=18,hjust = 0.5))+
   stat_ellipse(aes(colour=Season),type="t",linetype=2)+
   #annotate(geom="text", x=-0.7, y=0.7, label="a",color="black", size = 8,fontface="bold")+ 
-  annotate(geom="text", x=0.3, y=0.62, label="PERMANOVA p=0.001",color="black", size = 5)+stat_ellipse(aes(colour=Season),type="t",linetype=2)+
+  annotate(geom="text", x=0.38, y=0.62, label="PERMANOVA p=0.001",color="black", size = 5)+stat_ellipse(aes(colour=Season),type="t",linetype=2)+
   labs(title = "Seasonal clustering")#+theme(axis.line = element_line(colour = "black", 
 
 p_nmds
+
+
 
 #Panel with both NMDS new Figure 5
 p_nmds_all<-p_nmds+nmds.ssp.env+ plot_layout(ncol=2,widths=c(1,1))+plot_annotation(tag_levels = 'a')& 
@@ -231,6 +237,7 @@ nmds.plot.dune_an <- ggplot(site.scrs_an, aes(x=NMDS1, y=NMDS2))+ #sets up the p
   theme_classic()+ theme(plot.title = element_text(size=18,hjust = 0.5))+
   theme(panel.background = element_rect(fill = NA, colour = "black", size = 1, linetype = "solid"))+
   #labs(colour = "Season", shape = "Season")+ # add legend labels for Management and Landuse
+  annotate(geom="text", x=0.6, y=0.75, label="Stress < 0.01",color="black", size = 5)+
   theme(legend.position = "none", legend.text = element_text(size = 20), 
         legend.title = element_text(size = 21), axis.text = element_text(size = 20,face="bold"),
         axis.title=element_text(size=22,face="bold")) # add legend at right of plot
@@ -273,8 +280,13 @@ p_nmds_all_2<-p_nmds+nmds.ssp.env+pca_final+nmds.ssp.env_an+plot_annotation(tag_
 p_nmds_all_2
 
 #saving
-ggsave(filename = "Fig5_Final_Panel_v5.png",
+ggsave(filename = "Fig5_Final_Panel_v6.png",
        plot = p_nmds_all_2, width = 18, height = 18, units = 'cm',
        scale = 2, dpi = 1000)
+
+##PERMANOVA##
+
+adonis2 (meso.1  ~ Littertrial+Net_tree_growth_m2.ha+wood.decay+Shannon + P.av.20.40 +P.rem.0.20 + Vol.moisture.0.20, permutations = 999,method="bray",by="margin",data=env.4)
+
 
 #END##
