@@ -126,6 +126,7 @@ species.scores <- cbind(species.scores, pval = p_spp.fit$vectors$pvals)
 sig.spp.scrs <- subset(species.scores, pval<=0.05)
 head(species.scores)
 head(sig.spp.scrs)
+species.scores
 #species.scores$species <- rownames(species.scores)  # create a column of species, from the rownames of species.scores
 
 env.scores <- as.data.frame(scores(p_env, display = "vectors")) #extracts relevant scores from envifit
@@ -133,6 +134,7 @@ env.scores <- cbind(env.scores, env.variables = rownames(env.scores)) #and then 
 env.scores <- cbind(env.scores, pval = p_env$vectors$pvals) # add pvalues to dataframe
 sig.env.scrs <- subset(env.scores, pval<=0.05) #subset data to show variables significant at 0.05
 head(sig.env.scrs)
+env.scores
 
 nmds.plot.dune <- ggplot(site.scrs, aes(x=NMDS1, y=NMDS2))+ #sets up the plot
   geom_point(aes(NMDS1, NMDS2, colour = factor(Season), shape = factor(Season)), size = 4,alpha=0.8)+ #adds site points to plot, shape determined by Landuse, colour determined by Management
@@ -218,6 +220,7 @@ species.scores_an <- cbind(species.scores_an, pval = p_spp.fit_an$vectors$pvals)
 sig.spp.scrs_an <- subset(species.scores_an, pval<0.05)
 head(species.scores_an)
 head(sig.spp.scrs_an)
+species.scores_an
 #species.scores$species <- rownames(species.scores)  # create a column of species, from the rownames of species.scores
 
 env.scores_an <- as.data.frame(scores(p_env_an, display = "vectors")) #extracts relevant scores from envifit

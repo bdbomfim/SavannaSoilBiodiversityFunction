@@ -99,10 +99,11 @@ p_sp3<-p_sp + stat_compare_means(
 p_sp3
 
 #Final plot
-plot_meso_final<-(p_abd2+p_div2)/(p_even2+p_sp2)
+plot_meso_final<-(p_abd2+p_div2)/(p_even2+p_sp2)+plot_annotation(tag_levels = 'a')& 
+  theme(plot.tag = element_text(size = 22,face="bold"),plot.tag.position =c(0.05,1))
 plot_meso_final
 
-ggsave(filename = "Fig1_Meso_v6.png",
+ggsave(filename = "Fig1_Meso_v7.png",
        plot = plot_meso_final, width = 18, height = 13, units = 'cm',
        scale = 2, dpi = 1000)
 
@@ -116,36 +117,32 @@ summary(comm_dry)
 
 #### Correlation plot####
 
-soilcor<-read.csv(file.choose())#20210503_Soil
+soilcor<-read.csv(file.choose())#20210503_Cap2_Jonas_Correlation
 soilcor$Total_abundance=as.numeric(soilcor$Total_abundance)
 attach(soilcor)
-head(soilcor)
+str(soilcor)
 names(soilcor)
-names(comm_data)
+head(soilcor)
 soilcor$S<-comm_data$S
 soilcor$J<-comm_data$J
 
 Figdry <- soilcor
-Figdry2<-Figdry[,c(3:12)]
-names(Figdry2)
+Figdry2<-Figdry[,c(3,5:8,11:13)]
+names(Figdry2)#10 variables
 names(Figdry2)[names(Figdry2) == "Total_abundance"] <- "Total abundance"
-names(Figdry2)[names(Figdry2) == "Shannon_diversity_h"] <- "Shannon's diversity"
-names(Figdry2)[names(Figdry2) == "Total_litterfall_g_m2_month"] <- "Montly total litterfall"
+names(Figdry2)[names(Figdry2) == "Shannon"] <- "Shannon's diversity"
+names(Figdry2)[names(Figdry2) == "Total_litterfall_g_m2_month"] <- "Monthly total litterfall"
 names(Figdry2)[names(Figdry2) == "Leaf_fall_g_m2_month"] <- "Monthly leaf fall"
 names(Figdry2)[names(Figdry2) == "Wood_fall_g_m2_month"] <- "Monthly wood fall"
 names(Figdry2)[names(Figdry2) == "Mean_monthly_rainfall_mm"] <- "Mean monthly rainfall"
-names(Figdry2)[names(Figdry2) == "Leaf_k_at_720"] <- "Leaf decomposition rate"
-names(Figdry2)[names(Figdry2) == "Wood_k_at_720"] <- "Wood decomposition rate"
-names(Figdry2)[names(Figdry2) == "S"] <- "Number of groups"
-names(Figdry2)[names(Figdry2) == "J"] <- "Pielou's evenness"
+#names(Figdry2)[names(Figdry2) == "Leaf_k_at_720"] <- "Leaf k"
+#names(Figdry2)[names(Figdry2) == "Wood_k_at_720"] <- "Wood k"
+names(Figdry2)[names(Figdry2) == "Richness"] <- "Taxa richness"
+names(Figdry2)[names(Figdry2) == "Pielou"] <- "Pielou's evenness"
 
 corrdry <- round(cor(Figdry2,method="pearson"), 2)
 
 p.matdry <- cor_pmat(Figdry2)
-
-ggcorrplot(corrdry)
-ggcorrplot(corrdry, hc.order = TRUE, type = "lower",hc.method = "ward.D2",
-           outline.col = "white", p.mat = p.matdry,method="circle",ggtheme=ggplot2::theme_bw())
 
 Fig3_corr<-ggcorrplot(corrdry, hc.order = TRUE, type = "lower",hc.method = "ward.D2",sig.level = 0.05,
                     outline.col = "white", p.mat = p.matdry,method="square",ggtheme=ggplot2::theme_minimal(),show.legend=TRUE, 
