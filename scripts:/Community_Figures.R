@@ -7,7 +7,7 @@ library(patchwork)
 library(ggcorrplot)
 library(ggpubr)
 
-meso_cap2<-read.csv(file.choose())#20210502_FAUNA_NMDS_ASE
+meso_cap2<-read.csv(file.choose())#20210502_FAUNA_NMDS_ASE.csv
 str(meso_cap2)
 names(meso_cap2)
 meso_cap2.1 = as.data.frame(sapply(meso_cap2[3:27], as.numeric))
@@ -119,7 +119,6 @@ summary(comm_dry)
 
 soilcor<-read.csv(file.choose())#20210503_Cap2_Jonas_Correlation
 soilcor$Total_abundance=as.numeric(soilcor$Total_abundance)
-attach(soilcor)
 str(soilcor)
 names(soilcor)
 head(soilcor)
@@ -145,14 +144,14 @@ corrdry <- round(cor(Figdry2,method="pearson"), 2)
 p.matdry <- cor_pmat(Figdry2)
 
 Fig3_corr<-ggcorrplot(corrdry, hc.order = TRUE, type = "lower",hc.method = "ward.D2",sig.level = 0.05,
-                    outline.col = "white", p.mat = p.matdry,method="square",ggtheme=ggplot2::theme_minimal(),show.legend=TRUE, 
+                    outline.col = "white", p.mat = p.matdry,method="square",ggtheme=ggplot2::theme_classic(),show.legend=TRUE, 
                     legend.title="Pearson's r", lab=TRUE, lab_size=6, tl.cex=26,
-                    colors = c("#ABA0A0", "white", "#ffa600",pch.cex=20,nbreaks = 8,legend.text.cex=26))+font("legend.text",size=16)+font("legend.title", size=18)#+theme(axis.text.x = element_text(margin=margin(-2,0,0,0)),axis.text.y = element_text(margin=margin(0,-2,0,0)))
+                    colors = c("#B9B7BD", "white", "#EEEDE7",pch.cex=22,nbreaks = 8,legend.text.cex=30))+font("legend.text",size=20)+font("legend.title", size=22)#+theme(axis.text.x = element_text(margin=margin(-2,0,0,0)),axis.text.y = element_text(margin=margin(0,-2,0,0)))
 Fig3_corr
 
 #Saving figure in high res
 ggsave(filename = "Fig3_Final.png",
-       plot = Fig3_corr, width = 16, height = 18, units = 'cm',
+       plot = Fig3_corr, width = 16, height = 13, units = 'cm',
        scale = 2, dpi = 1000)
 
 ##END###
